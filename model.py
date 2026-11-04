@@ -78,14 +78,15 @@ class Model(QObject):
     def save(self):
         with open(self.__file_path, "w") as f:
             json.dump({"a": self.__a, "b": self.__b, "c": self.__c}, f)
-        
-m = Model()
-m.set_a(30)
-print(m.get_a(), m.get_b(), m.get_c())
-m.set_b(20)
-print(m.get_a(), m.get_b(), m.get_c())
-m.set_c(80)
-m.set_b(10)
-print(m.get_a(), m.get_b(), m.get_c())
-m.set_b(900)
-print(m.get_a(), m.get_b(), m.get_c())
+
+if __name__ == "__main__":
+    m = Model()
+    m.set_a(30)
+    print(m.get_a(), m.get_b(), m.get_c())
+    m.set_b(20)
+    print(m.get_a(), m.get_b(), m.get_c())
+    m.set_c(80)
+    m.set_b(10)
+    print(m.get_a(), m.get_b(), m.get_c())
+    m.set_b(900)
+    print(m.get_a(), m.get_b(), m.get_c())
