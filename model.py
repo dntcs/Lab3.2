@@ -1,4 +1,5 @@
 from PyQt6.QtCore import QObject, pyqtSignal
+import json, os
 
 def norm(x, l, h):
     if x<l:
@@ -15,6 +16,8 @@ class Model(QObject):
         self.__a = 1
         self.__b = 2
         self.__c = 3
+        self.__file_path = os.path.join(os.path.dirname(__file__), "numbers.json")
+        self.load()
 
     def get_min(self):
         return 0
@@ -39,6 +42,24 @@ class Model(QObject):
         self.__b = b
         self.__c = c
         self.valuesChanged.emit()
+        self.save()
+
+    def load(self):
+        if os.path.exists(self.__file_path) == False:
+            return
+        with open(self.__file_path, "r") as f:
+            x = json.load(f)
+            a = int(x["a"])
+            b = int(x["b"])
+            c = int(x["c"])
+        a = norm(a, self.get_min(), self.get_max())
+        c = norm(c, self.get_min(), self.get_max())
+        if a>c:
+            a,c = c,a
+        b = norm(b, a, c)
+        self.__a = a
+        self.__b = b
+        self.__c = c
 
     def set_a(self, x):
         a = norm(x, self.get_min(), self.get_max())
@@ -53,6 +74,10 @@ class Model(QObject):
     def set_b(self, x):
         b = norm(x, self.__a, self.__c)
         self.check(self.__a, b, self.__c)
+
+    def save(self):
+        with open(self.__file_path, "w") as f:
+            json.dump({"a": self.__a, "b": self.__b, "c": self.__c}, f)
         
 m = Model()
 m.set_a(30)
